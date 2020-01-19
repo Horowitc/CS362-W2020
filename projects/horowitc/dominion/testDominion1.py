@@ -9,56 +9,24 @@ import Dominion
 import random
 from collections import defaultdict
 
-#Get player names
+
 from projects.horowitc.dominion import testUtility
-
+#Get player names
 player_names = ["Annie","*Ben","*Carla"]
-
 #number of curses and victory cards
-if len(player_names)>2:
-    nV=12
-else:
-    nV=8
+nV = testUtility.GetVictoryCards(player_names)
 nC = -10 + 10 * len(player_names)
-
 #Define box
 box = testUtility.GetBox(nV)
-
-
-supply_order = {0:['Curse','Copper'],2:['Estate','Cellar','Chapel','Moat'],
-                3:['Silver','Chancellor','Village','Woodcutter','Workshop'],
-                4:['Gardens','Bureaucrat','Feast','Militia','Moneylender','Remodel','Smithy','Spy','Thief','Throne Room'],
-                5:['Duchy','Market','Council Room','Festival','Laboratory','Library','Mine','Witch'],
-                6:['Gold','Adventurer'],8:['Province']}
-
+supply_order = testUtility.GetSupplyOrder()
 #Pick 10 cards from box to be in the supply.
-boxlist = [k for k in box]
-random.shuffle(boxlist)
+boxlist = testUtility.GetBoxList(box)
 random10 = boxlist[:10]
-supply = defaultdict(list,[(k,box[k]) for k in random10])
-
-
-#The supply always has these cards
-supply["Copper"]=[Dominion.Copper()]*(60-len(player_names)*7)
-supply["Silver"]=[Dominion.Silver()]*40
-supply["Gold"]=[Dominion.Gold()]*30
-supply["Estate"]=[Dominion.Estate()]*nV
-supply["Duchy"]=[Dominion.Duchy()]*nV
-supply["Province"]=[Dominion.Province()]*nV
-supply["Curse"]=[Dominion.Curse()]*nC
-
+supply = testUtility.GetSupply(box, random10, player_names, nV, nC)
 #initialize the trash
 trash = []
-
-#Costruct the Player objects
-players = []
-for name in player_names:
-    if name[0]=="*":
-        players.append(Dominion.ComputerPlayer(name[1:]))
-    elif name[0]=="^":
-        players.append(Dominion.TablePlayer(name[1:]))
-    else:
-        players.append(Dominion.Player(name))
+#Construct the Player objects
+players = testUtility.GetPlayers(player_names)
 
 #Play the game
 turn  = 0
@@ -84,14 +52,7 @@ while not Dominion.gameover(supply):
 dcs=Dominion.cardsummaries(players)
 vp=dcs.loc['VICTORY POINTS']
 vpmax=vp.max()
-winners=[]
-for i in vp.index:
-    if vp.loc[i]==vpmax:
-        winners.append(i)
-if len(winners)>1:
-    winstring= ' and '.join(winners) + ' win!'
-else:
-    winstring = ' '.join([winners[0],'wins!'])
-
+winners=testUtility.GetWinners(vp, vpmax)
+winstring=testUtility.GetWinString(winners)
 print("\nGAME OVER!!!\n"+winstring+"\n")
 print(dcs)
