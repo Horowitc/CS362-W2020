@@ -27,7 +27,7 @@ supply = testUtility.GetSupply(box, random10, player_names, nV, nC)
 
 
 
-#Test Scenario
+#Test Scenarios
 supply["Copper"] = [Dominion.Spy()] * 1
 supply["Estate"] = [Dominion.Spy()] * 1
 supply["Duchy"] = [Dominion.Spy()] * 1
