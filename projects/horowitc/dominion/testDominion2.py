@@ -15,6 +15,7 @@ from projects.horowitc.dominion import testUtility
 player_names = ["Annie","*Ben","*Carla"]
 #number of curses and victory cards
 nV = testUtility.GetVictoryCards(player_names)
+#nV = 0
 nC = -10 + 10 * len(player_names)
 #Define box
 box = testUtility.GetBox(nV)
@@ -23,13 +24,23 @@ supply_order = testUtility.GetSupplyOrder()
 boxlist = testUtility.GetBoxList(box)
 random10 = boxlist[:10]
 supply = testUtility.GetSupply(box, random10, player_names, nV, nC)
+
+
+
+#Test Scenario
+supply["Copper"] = [Dominion.Spy()] * 1
+supply["Estate"] = [Dominion.Spy()] * 1
+supply["Duchy"] = [Dominion.Spy()] * 1
+supply["Province"] = [Dominion.Spy()] * 1
+
+
 #initialize the trash
 trash = []
 #Construct the Player objects
 players = testUtility.GetPlayers(player_names)
 
 #Play the game
-turn  = 0
+turn = 0
 while not Dominion.gameover(supply):
     turn += 1    
     print("\r")    

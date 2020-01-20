@@ -18,6 +18,12 @@ nV = testUtility.GetVictoryCards(player_names)
 nC = -10 + 10 * len(player_names)
 #Define box
 box = testUtility.GetBox(nV)
+
+
+#Test Scenario
+box["Market"] = [Dominion.Militia()] * 10
+
+
 supply_order = testUtility.GetSupplyOrder()
 #Pick 10 cards from box to be in the supply.
 boxlist = testUtility.GetBoxList(box)
