@@ -21,7 +21,7 @@ box = testUtility.GetBox(nV)
 
 
 #Test Scenario
-box["Market"] = [Dominion.Militia()] * 10
+box["Market"] = [Dominion.Militia()] * 9
 
 
 supply_order = testUtility.GetSupplyOrder()
