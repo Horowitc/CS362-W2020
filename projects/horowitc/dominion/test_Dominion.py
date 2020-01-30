@@ -16,6 +16,9 @@ class TestCard(TestCase):
         self.supply = testUtility.GetSupply(self.box, self.random10, self.player_names, self.nV, self.nC)
         self.trash = []
         self.player = Dominion.Player('Annie')
+        self.player.actions = 1
+        self.player.buys = 1
+        self.player.purse = 1
 
     def test_init(self):
         self.setUp()
@@ -33,6 +36,33 @@ class TestCard(TestCase):
         self.assertEqual(cards, action.cards)
         self.assertEqual(buys, action.buys)
         self.assertEqual(coins, action.coins)
+        self.player.hand = [action] * 1
+
+        # Test Action card use
+        action.use(self.player, self.trash)
+        self.assertIn(action, self.player.played)
+        self.assertNotIn(action, self.player.hand)
+
+        # Test Action card augment
+        action.augment(self.player)
+        self.assertEqual(3, self.player.actions)
+        self.assertEqual(2, self.player.buys)
+        self.assertEqual(2, self.player.purse)
+
+    def test_Player(self):
+        #Test Player action balance function
+        balance = self.player.action_balance()
+        self.assertEqual(0.0, balance)
+
+        #Test Player calculate points function
+        tally = self.player.calcpoints()
+        self.assertEqual(3, tally)
+
+        #Test Player draw function
+        newcard = self.player.draw()
+        self.assertIn(newcard, self.player.hand)
+
+
 
     def test_react(self):
         pass
