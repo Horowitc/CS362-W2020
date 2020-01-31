@@ -130,7 +130,7 @@ class TestCard(TestCase):
         gover = Dominion.gameover(self.supply)
         self.assertEqual(gover, True)
 
-        # Test game over function 3
+        # Test gameover function 3
         self.supply["Province"] = [Dominion.Province()] * 1
         self.supply["Copper"] = [Dominion.Copper()] * 0
         self.supply["Silver"] = [Dominion.Silver()] * 0
