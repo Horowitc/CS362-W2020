@@ -26,7 +26,7 @@ class TestCard(TestCase):
     def test_Action(self):
         # Test Action card intialization number 1
         cost = 1
-        actions = 2
+        actions = 1
         cards = 1
         buys = 1
         coins = 1
@@ -45,7 +45,7 @@ class TestCard(TestCase):
 
         # Test Action card augment
         action.augment(self.player)
-        self.assertEqual(3, self.player.actions)
+        self.assertEqual(2, self.player.actions)
         self.assertEqual(2, self.player.buys)
         self.assertEqual(2, self.player.purse)
 
@@ -59,8 +59,29 @@ class TestCard(TestCase):
         self.assertEqual(3, tally)
 
         #Test Player draw function
+        self.player.hand = [Dominion.Duchy()]*1
+        self.player.deck = [Dominion.Cellar()]*1
         newcard = self.player.draw()
         self.assertIn(newcard, self.player.hand)
+        self.assertEqual(newcard, self.player.hand[1])
+
+        # Test Player card summary function
+        self.player.deck = [Dominion.Duchy()]*1
+        self.player.hand = [Dominion.Copper()]*2
+        summary = self.player.cardsummary()
+        self.assertEqual(1, summary['Duchy'])
+        self.assertEqual(2, summary['Copper'])
+        self.assertEqual(3, summary['VICTORY POINTS'])
+
+    def test_Game_Over(self):
+        #Test game over function
+        self.supply["Province"] = [Dominion.Province()] * 1
+        gover =Dominion.gameover(self.supply)
+        self.assertEqual(gover, False)
+        self.supply["Province"] = [Dominion.Province()] * 0
+        gover = Dominion.gameover(self.supply)
+        self.assertEqual(gover, True)
+
 
 
 
