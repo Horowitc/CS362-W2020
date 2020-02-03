@@ -23,7 +23,7 @@ class TestCard(TestCase):
     def test_init(self):
         self.setUp()
 
-    def test_Action(self):
+    def test_action_init(self):
         cost = 2
         actions = 3
         cards = 5
@@ -35,7 +35,6 @@ class TestCard(TestCase):
         self.assertEqual(cards, action.cards)
         self.assertEqual(buys, action.buys)
         self.assertEqual(coins, action.coins)
-        self.player.hand = [action] * 1
         # Test Action card intialization number 2
         cost = 1
         actions = 1
@@ -48,13 +47,18 @@ class TestCard(TestCase):
         self.assertEqual(cards, action.cards)
         self.assertEqual(buys, action.buys)
         self.assertEqual(coins, action.coins)
-        self.player.hand = [action] * 1
 
+    def test_use(self):
+        action = Dominion.Action_card(self.player.name, 1, 1, 1, 1, 1)
+        self.player.hand = [action] * 1
         # Test Action card use
         action.use(self.player, self.trash)
         self.assertIn(action, self.player.played)
         self.assertNotIn(action, self.player.hand)
 
+    def test_augment(self):
+        action = Dominion.Action_card(self.player.name, 1, 1, 1, 1, 1)
+        self.player.hand = [action] * 1
         # Test Action card augment
         action.augment(self.player)
         self.assertEqual(2, self.player.actions)
@@ -63,7 +67,7 @@ class TestCard(TestCase):
 
 
 
-    def test_Player(self):
+    def test_action_balance(self):
         #Test Player action balance function 1
         self.player.deck = [Dominion.Militia()]*2
         balance = self.player.action_balance()
@@ -74,6 +78,7 @@ class TestCard(TestCase):
         balance = self.player.action_balance()
         self.assertEqual(20, balance)
 
+    def test_calcpoints(self):
         #Test Player calculate points function 1
         self.player.deck = [Dominion.Duchy()] * 1
         self.player.hand = [Dominion.Copper()] * 1
@@ -81,11 +86,12 @@ class TestCard(TestCase):
         self.assertEqual(3, tally)
 
         # Test Player calculate points function 2
-        self.player.deck = [Dominion.Duchy()] * 2
+        self.player.deck = [Dominion.Duchy()] * 2 + [Dominion.Gardens()]*1
         self.player.hand = [Dominion.Copper()] * 2
         tally = self.player.calcpoints()
         self.assertEqual(6, tally)
 
+    def test_draw(self):
         #Test Player draw function 1
         self.player.hand = [Dominion.Duchy()]*1
         self.player.deck = [Dominion.Cellar()]*1
@@ -102,6 +108,14 @@ class TestCard(TestCase):
         self.assertIn(newcard, self.player.hand)
         self.assertEqual(newcard, self.player.hand[1])
 
+        # Test Player draw function 3
+        self.player.hand = [Dominion.Estate()] * 1
+        self.player.deck = []
+        newcard = self.player.draw()
+        self.assertNotIn(newcard, self.player.deck)
+
+
+    def test_card_summary(self):
         # Test Player card summary function 1
         self.player.deck = [Dominion.Duchy()]*1
         self.player.hand = [Dominion.Copper()]*2
@@ -118,11 +132,10 @@ class TestCard(TestCase):
         self.assertEqual(1, summary['Silver'])
         self.assertEqual(2, summary['VICTORY POINTS'])
 
-    def test_Game_Over(self):
+    def test_game_over(self):
         #Test game over function 1
         self.supply["Province"] = [Dominion.Province()] * 1
         gover =Dominion.gameover(self.supply)
-        print(len(self.supply))
         self.assertEqual(gover, False)
 
         # Test game over function 2
