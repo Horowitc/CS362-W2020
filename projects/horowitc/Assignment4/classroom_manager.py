@@ -43,7 +43,7 @@ class Student:
                 return
 
 
-#Assignment class
+#Assignment Class
 class Assignment:
     def __init__(self, name, max_score):
         self.name = name
