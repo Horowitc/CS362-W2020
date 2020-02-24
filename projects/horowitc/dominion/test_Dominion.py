@@ -103,7 +103,7 @@ class TestCard(TestCase):
         # Test Player draw function 2
         self.player.hand = [Dominion.Estate()] * 1
         self.player.deck = [Dominion.Militia()] * 1
-        newcard = self.player.draw()
+        newcard = self.player.draw(dest=self.player.hand)
         self.assertNotIn(newcard, self.player.deck)
         self.assertIn(newcard, self.player.hand)
         self.assertEqual(newcard, self.player.hand[1])
